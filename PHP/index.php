@@ -1,5 +1,15 @@
 <?php
-session_start();
+
+
+session_start(); // start a new session or continues the previous
+if (isset($_SESSION['user']) ) {
+  header("Location: user.php"); // redirects to home.php
+}
+if (isset($_SESSION['adm']) ) {
+  header("Location: dashboard.php"); // redirects to home.php
+}
+
+
 require_once "..\components\bootst.php";
 require_once "..\components\db_connect.php";
 require_once "..\components\header.php";
@@ -33,24 +43,25 @@ if (isset($_POST['log'])) {
         $error = true;
     }
 
-    // if there's no error, continue to login
+    // *******if there's no error, continue to login******************************************
     if (!$error) {
 
-
-        $sql = "SELECT * FROM `users` where email='$email' ";
+//***************just if pass and email match pass and email in db can log in********************************
+        $sql = "SELECT * FROM `users` where email='$email' && pass='$pass'";
         $result = mysqli_query($conn, $sql);
         $row = mysqli_fetch_assoc($result);
         $count = mysqli_num_rows($result);
+        if($row){
         if ($row['status'] == 'adm') {
             $_SESSION['adm'] = $row['user_id'];
             header("Location: ./dashbord.php?id={$row['user_id']}");
         } if ($row['status'] == 'user') {
             $_SESSION['user'] = $row['user_id'];
             header("Location: ./user.php?id={$row['user_id']}");
-        }
+        }}
     }     
     
-    //any one not admin or user it will be exit and end session!!!!!
+    //*********any one not admin or user it will be exit and end session!!!!!****************************************************************
 
 else{session_destroy();
     exit();

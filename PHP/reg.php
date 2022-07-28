@@ -1,6 +1,5 @@
 <?php
 
-
 require_once "..\components\bootst.php";
 require_once "..\components\db_connect.php";
 require_once "..\components\header.php";

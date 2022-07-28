@@ -1,18 +1,21 @@
 <?php
-session_start(); 
-if (isset($_SESSION['user']) != "") {
-  header("Location:home.php"); 
+
+
+session_start();
+if (!isset($_SESSION['adm']) && !isset($_SESSION['user'])) {
+  header("Location: index.php");
+  exit;
+} else if (isset($_SESSION['user']) != "") {
+  header("Location: user.php");
+} else if (isset($_SESSION['adm']) != "") {
+  header("Location: dashboard.php");
 }
-if (isset($_SESSION['adm']) != "") {
-  header("Location:home.php"); 
+
+if (isset($_GET['logout'])) {
+  unset($_SESSION['user']);
+  unset($_SESSION['adm']);
+  session_unset();
+  session_destroy();
+  header("Location: index.php");
+  exit;
 }
-
-require_once "..\components\bootst.php";
-
-header("Refresh:3;url=home.php");
-?>
-<div class=" alert alert-success">
-    <h1 class="text-center"> Good Bye</h1>
-
-
-</div>
